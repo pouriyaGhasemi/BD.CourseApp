@@ -24,7 +24,6 @@ public class StudentRepository : IStudentRepository
     {
         using var connection = new SqlConnection(_connectionString);
         return await connection.QuerySingleOrDefaultAsync<Student>("SELECT * FROM Students WHERE StudentId = @StudentId", new { StudentId = id });
-
     }
 
     public async Task UpdateAsync(Student student)
@@ -39,7 +38,6 @@ public class StudentRepository : IStudentRepository
     {
         using var connection = new SqlConnection(_connectionString);
         await connection.ExecuteAsync("DELETE FROM Students WHERE StudentId = @StudentId", new { StudentId = id });
-
     }
 
     public async Task<IEnumerable<Student>> GetAllAsync(string nameFilter, int pageNumber, int pageSize)
