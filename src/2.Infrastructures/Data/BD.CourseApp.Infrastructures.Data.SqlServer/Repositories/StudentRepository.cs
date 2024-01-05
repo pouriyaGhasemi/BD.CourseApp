@@ -1,45 +1,58 @@
-﻿using BD.CourseApp.Core.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.SqlClient;
+using Dapper;
+using BD.CourseApp.Core.Domain.Contracts;
+using BD.CourseApp.Core.Domain.Entities;
 
-namespace BD.CourseApp.Infrastructures.Data.SqlServer.Repositories
+public class StudentRepository : IStudentRepository
 {
-    public class StudentRepository
+    private readonly string _connectionString;
+
+    public StudentRepository(string connectionString)
     {
-        private string _connectionString;
+        _connectionString = connectionString;
+    }
 
-        public StudentRepository(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
+    public async Task CreateAsync(Student student)
+    {
+        using var connection = new SqlConnection(_connectionString);
+        var sql = "INSERT INTO Students (StudentId, Name) VALUES (@StudentId, @Name)";
+        await connection.ExecuteAsync(sql, student);
 
-        public List<Student> GetAllStudents()
-        {
-            var students = new List<Student>();
+    }
 
-            using SqlConnection connection = new SqlConnection(_connectionString);
+    public async Task<Student> GetByIdAsync(Guid id)
+    {
+        using var connection = new SqlConnection(_connectionString);
+        return await connection.QuerySingleOrDefaultAsync<Student>("SELECT * FROM Students WHERE StudentId = @StudentId", new { StudentId = id });
 
-            connection.Open();
-            SqlCommand command = new SqlCommand("SELECT * FROM Students", connection);
-            using (SqlDataReader reader = command.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    var student = new Student
-                    {
-                        StudentId = new Guid(reader["StudentId"].ToString()),
-                        Name = reader["Name"].ToString()
-                    };
-                    students.Add(student);
-                }
-            }
-            connection.Close();
+    }
 
-            return students;
-        }
+    public async Task UpdateAsync(Student student)
+    {
+        using var connection = new SqlConnection(_connectionString);
+        var sql = "UPDATE Students SET Name = @Name WHERE StudentId = @StudentId";
+        await connection.ExecuteAsync(sql, student);
+
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        using var connection = new SqlConnection(_connectionString);
+        await connection.ExecuteAsync("DELETE FROM Students WHERE StudentId = @StudentId", new { StudentId = id });
+
+    }
+
+    public async Task<IEnumerable<Student>> GetAllAsync(string nameFilter, int pageNumber, int pageSize)
+    {
+        using var connection = new SqlConnection(_connectionString);
+        var sql = @"
+                SELECT * FROM Students 
+                WHERE (@NameFilter IS NULL OR Name LIKE '%' + @NameFilter + '%')
+                ORDER BY Name
+                OFFSET @PageSize * (@PageNumber - 1) ROWS
+                FETCH NEXT @PageSize ROWS ONLY";
+
+        return await connection.QueryAsync<Student>(sql, new { NameFilter = nameFilter, PageNumber = pageNumber, PageSize = pageSize });
+
     }
 }
