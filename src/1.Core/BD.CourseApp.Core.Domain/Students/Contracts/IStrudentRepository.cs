@@ -1,6 +1,6 @@
-﻿using BD.CourseApp.Core.Domain.Entities;
+﻿using BD.CourseApp.Core.Domain.Students;
 
-namespace BD.CourseApp.Core.Domain.Contracts
+namespace BD.CourseApp.Core.Domain.Students.Contracts
 {
     public interface IStudentRepository
     {

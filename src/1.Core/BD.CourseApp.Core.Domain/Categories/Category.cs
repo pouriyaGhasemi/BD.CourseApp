@@ -1,4 +1,4 @@
-﻿namespace BD.CourseApp.Core.Domain.Entities
+﻿namespace BD.CourseApp.Core.Domain.Categories
 {
     public class Category
     {

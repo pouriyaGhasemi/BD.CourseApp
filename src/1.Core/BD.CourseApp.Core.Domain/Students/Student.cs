@@ -1,6 +1,7 @@
 ﻿using System.Collections.Frozen;
+using BD.CourseApp.Core.Domain.Courses;
 
-namespace BD.CourseApp.Core.Domain.Entities
+namespace BD.CourseApp.Core.Domain.Students
 {
     public class Student
     {

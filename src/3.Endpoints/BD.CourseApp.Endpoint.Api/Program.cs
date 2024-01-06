@@ -1,9 +1,17 @@
+using BD.CourseApp.Core.Domain.Students.Contracts;
+using System.Data.SqlClient;
+using System.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped(_ =>
+    new SqlConnection(builder.Configuration.GetConnectionString("CourseAppConnectionString")));
 
 var app = builder.Build();
 

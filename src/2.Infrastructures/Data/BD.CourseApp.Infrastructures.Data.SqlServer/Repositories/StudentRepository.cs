@@ -1,56 +1,53 @@
 ﻿using System.Data.SqlClient;
 using Dapper;
-using BD.CourseApp.Core.Domain.Contracts;
-using BD.CourseApp.Core.Domain.Entities;
+using BD.CourseApp.Core.Domain.Students;
+using BD.CourseApp.Core.Domain.Students.Contracts;
+using BD.CourseApp.Infrastructures.Data.SqlServer.Extentions;
 
 public class StudentRepository : IStudentRepository
 {
-    private readonly string _connectionString;
+    private readonly SqlConnection connection;
 
-    public StudentRepository(string connectionString)
+    public StudentRepository(SqlConnection dbConnection)
     {
-        _connectionString = connectionString;
+
+        connection = dbConnection;
     }
 
     public async Task CreateAsync(Student student)
     {
-        using var connection = new SqlConnection(_connectionString);
-        var sql = "INSERT INTO Students (StudentId, Name) VALUES (@StudentId, @Name)";
+        var sql = "insert into Students (StudentId, Name) values (@StudentId, @Name)";
         await connection.ExecuteAsync(sql, student);
-
     }
 
     public async Task<Student> GetByIdAsync(Guid id)
     {
-        using var connection = new SqlConnection(_connectionString);
-        return await connection.QuerySingleOrDefaultAsync<Student>("SELECT * FROM Students WHERE StudentId = @StudentId", new { StudentId = id });
+        return await connection.QuerySingleOrDefaultAsync<Student>(
+            "select * from Students where StudentId = @StudentId", new { StudentId = id });
     }
 
     public async Task UpdateAsync(Student student)
     {
-        using var connection = new SqlConnection(_connectionString);
-        var sql = "UPDATE Students SET Name = @Name WHERE StudentId = @StudentId";
+        var sql = "update Students set Name = @Name where StudentId = @StudentId";
         await connection.ExecuteAsync(sql, student);
-
     }
 
     public async Task DeleteAsync(Guid id)
     {
-        using var connection = new SqlConnection(_connectionString);
-        await connection.ExecuteAsync("DELETE FROM Students WHERE StudentId = @StudentId", new { StudentId = id });
+        await connection.ExecuteAsync(
+            "delete from Students where StudentId = @StudentId", new { StudentId = id });
     }
 
-    public async Task<IEnumerable<Student>> GetAllAsync(string nameFilter, int pageNumber, int pageSize)
+    public async Task<IEnumerable<Student>> GetAllAsync(string? name, int pageNumber, int pageSize)
     {
-        using var connection = new SqlConnection(_connectionString);
-        var sql = @"
-                SELECT * FROM Students 
-                WHERE (@NameFilter IS NULL OR Name LIKE '%' + @NameFilter + '%')
-                ORDER BY Name
-                OFFSET @PageSize * (@PageNumber - 1) ROWS
-                FETCH NEXT @PageSize ROWS ONLY";
+        QueryBuilder queryBuilder = new QueryBuilder();
+        queryBuilder.Select("select * from Students ")
+            .like("Name", name)
+            .OrderBy("Name")
+            .PageBy(pageNumber, pageSize);
 
-        return await connection.QueryAsync<Student>(sql, new { NameFilter = nameFilter, PageNumber = pageNumber, PageSize = pageSize });
+        return await connection.QueryAsync<Student>(queryBuilder.Build(), new { NameFilter = name, PageNumber = pageNumber, PageSize = pageSize });
 
     }
 }
+
