@@ -1,0 +1,24 @@
+version: '3.4'
+
+services:
+  bd.courseapp.endpoint.api:
+    image: ${DOCKER_REGISTRY-}bdcourseappendpointapi
+    build:
+      context: .
+      dockerfile: src/3.Endpoints/BD.CourseApp.Endpoint.Api/Dockerfile
+    depends_on:
+      - sqlserver
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: "fMw4WQkzD8"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlvolume:/var/opt/mssql
+      - ./Solution Items/script.sql:/docker-entrypoint-initdb.d
+
+volumes:
+  sqlvolume:

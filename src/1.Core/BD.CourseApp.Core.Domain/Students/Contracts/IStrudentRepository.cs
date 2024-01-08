@@ -1,4 +1,4 @@
-﻿using BD.CourseApp.Core.Domain.Students;
+﻿using BD.CourseApp.Core.Domain.Students.Entities;
 
 namespace BD.CourseApp.Core.Domain.Students.Contracts
 {
