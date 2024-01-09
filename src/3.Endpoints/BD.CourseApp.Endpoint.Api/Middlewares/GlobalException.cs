@@ -23,7 +23,6 @@ namespace BD.CourseApp.Endpoint.Api.Middlwares
                 result.StatusCode = 500;
                 context.Result = result;
             }
-
             //add log
             logger.LogError(context.Exception, context.Exception.Message);
         }

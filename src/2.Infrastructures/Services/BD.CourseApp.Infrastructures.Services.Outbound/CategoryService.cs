@@ -1,21 +1,22 @@
-﻿using BD.CourseApp.Core.Domain.Categories;
+﻿using BD.CourseApp.Core.Domain.Categories.Entities;
 using System.Text.Json;
 
 namespace BD.CourseApp.Infrastructures.Services.Outbound
 {
-    public class GetCategoryService
+    public class CategoryService: ICategoryService
     {
         private readonly HttpClient _httpClient;
-        //private readonly string _apiUrl;
+        private IEnumerable<Category>? _categories;
 
         //use system.text.json over newtonsoft in .net 8
-        public GetCategoryService(HttpClient httpClient, string apiUrl)
+        public CategoryService(HttpClient httpClient)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            //_apiUrl = apiUrl ?? throw new ArgumentNullException(nameof(apiUrl)); 
         }
         public async Task<IEnumerable<Category>> GetCategories()
         {
+            if(_categories!=null)
+                return _categories;
             //ToDo:Cache this in our local databse and call it just in create course.
             HttpResponseMessage response = await _httpClient.GetAsync("");
 
@@ -33,9 +34,8 @@ namespace BD.CourseApp.Infrastructures.Services.Outbound
         }
         public async Task<Category> GetCategoryById(int id)
         {
-            //ToDo:Cache this in our local databse and call it just in create course.
-            var categories = await GetCategories();
-            var category= categories.Where(w => w.CategoryId == id).SingleOrDefault();
+            _categories??=await GetCategories();
+            var category= _categories.Where(w => w.CategoryId == id).SingleOrDefault();
             if (category is null)
                 throw new CategoryNotExistException($"id is {id}");
             return category;

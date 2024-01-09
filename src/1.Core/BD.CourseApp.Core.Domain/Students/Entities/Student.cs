@@ -1,6 +1,6 @@
 ﻿using System.Collections.Frozen;
 using System.ComponentModel.DataAnnotations;
-using BD.CourseApp.Core.Domain.Courses;
+using BD.CourseApp.Core.Domain.Courses.Entites;
 
 namespace BD.CourseApp.Core.Domain.Students.Entities
 {

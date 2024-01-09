@@ -13,7 +13,6 @@ public class StudentRepository : IStudentRepository
 
     public StudentRepository(SqlConnection dbConnection)
     {
-
         _connection = dbConnection;
     }
 

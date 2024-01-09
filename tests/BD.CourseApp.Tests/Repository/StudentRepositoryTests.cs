@@ -13,68 +13,68 @@ namespace BD.CourseApp.Tests.Repository
             _studentRepository = new StudentRepository(fixture.DbConnection);
         }
         [Fact]
-        public async Task should_create_strudent()
+        public async Task should_create_student()
         {
-            //arrange
+            //Arrange
             Student testStudent = new Student() { StudentId = Guid.NewGuid(), Name = "st1" };
-            //act
+            //Act
             using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             await _studentRepository.CreateAsync(testStudent);
-            var fetchedStrudent = await _studentRepository.GetByIdAsync(testStudent.StudentId);
+            var fetchedstudent = await _studentRepository.GetByIdAsync(testStudent.StudentId);
             //Assert
-            fetchedStrudent.Should().NotBeNull();
-            fetchedStrudent.Name.Should().Be(testStudent.Name);
-            fetchedStrudent.StudentId.Should().Be(testStudent.StudentId);
+            fetchedstudent.Should().NotBeNull();
+            fetchedstudent.Name.Should().Be(testStudent.Name);
+            fetchedstudent.StudentId.Should().Be(testStudent.StudentId);
         }
         [Fact]
-        public async Task should_update_strudent()
+        public async Task should_update_student()
         {
+            //Arrange
             string newName = "st2";
-            //arrange
             Student testStudent = new Student() { StudentId = Guid.NewGuid(), Name = "st1" };
-            //act
+            //Act
             using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             await _studentRepository.CreateAsync(testStudent);
             testStudent.Name = newName;
             await _studentRepository.UpdateAsync(testStudent);
-            var fetchedStrudent = await _studentRepository.GetByIdAsync(testStudent.StudentId);
+            var fetchedstudent = await _studentRepository.GetByIdAsync(testStudent.StudentId);
             
             //Assert
-            fetchedStrudent.Should().NotBeNull();
-            fetchedStrudent.StudentId.Should().Be(testStudent.StudentId);
-            fetchedStrudent.Name.Should().Be(newName);
+            fetchedstudent.Should().NotBeNull();
+            fetchedstudent.StudentId.Should().Be(testStudent.StudentId);
+            fetchedstudent.Name.Should().Be(newName);
         }
 
         [Fact]
-        public async Task should_delete_strudent()
+        public async Task should_delete_student()
         {
-            //arrange
+            //Arrange
             Student testStudent = new Student() { StudentId = Guid.NewGuid(), Name = "st1" };
-            //act
+            //Act
             using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             await _studentRepository.CreateAsync(testStudent);
             await _studentRepository.DeleteAsync(testStudent.StudentId);
-            var fetchedStrudent = await _studentRepository.GetByIdAsync(testStudent.StudentId);
+            var fetchedstudent = await _studentRepository.GetByIdAsync(testStudent.StudentId);
 
             //Assert
-            fetchedStrudent.Should().BeNull();
+            fetchedstudent.Should().BeNull();
         }
 
         [Fact]
-        public async Task should_get_all_strudent()
+        public async Task should_get_all_student()
         {
-            //arrange
+            //Arrange
             Student testStudent = new Student() { StudentId = Guid.NewGuid(), Name = "st1" };
             Student testStudent2 = new Student() { StudentId = Guid.NewGuid(), Name = "st2" };
-            //act
-            //ToDo:This test is not indipented. Get size of all, then add two item and check if the size is +2
+            //Act
+            //ToDo:This test is not independent. Get size of all records, then add two item and check if the size is +2
             using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             await _studentRepository.CreateAsync(testStudent);
             await _studentRepository.CreateAsync(testStudent2);
-            var strudentS = await _studentRepository.GetAllAsync(null,1,100);
+            var studentS = await _studentRepository.GetAllAsync(null,1,100);
             //Assert
-            strudentS.Should().NotBeNull();
-            strudentS.Where(w => new List<Guid> {testStudent.StudentId,testStudent2.StudentId }.Contains(w.StudentId))
+            studentS.Should().NotBeNull();
+            studentS.Where(w => new List<Guid> {testStudent.StudentId,testStudent2.StudentId }.Contains(w.StudentId))
                 .Count().Should().Be(2);
         }
     }
