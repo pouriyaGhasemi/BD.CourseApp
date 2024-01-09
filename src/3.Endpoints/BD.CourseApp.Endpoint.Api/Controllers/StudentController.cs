@@ -13,7 +13,7 @@ namespace BD.CourseApp.Endpoint.Api.Controllers
     public class StudentsController : ControllerBase
     {
         [HttpGet("{Id}")]
-        public async Task<ActionResult<Student>> Get([FromServices] GetStudentHandler request, [FromRoute] string Id) {
+        public async Task<ActionResult<StudentOutDTO>> Get([FromServices] GetStudentHandler request, [FromRoute] string Id) {
             var result= await request.Handle(Id);
             if (result is null)
                 return NotFound();
@@ -25,6 +25,14 @@ namespace BD.CourseApp.Endpoint.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             await createStudentHandler.Handle(studentCreate);
+            return Ok();
+        }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<StudentOutDTO>>> GetAll([FromServices] GetAllCreateHandler getAllCreateHandler
+            , [FromQuery]string? name, [FromQuery] int pageNumber, [FromQuery] int pageSize)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
             return Ok();
         }
     }

@@ -1,10 +1,9 @@
 ﻿using System.Data.SqlClient;
 using Dapper;
-using System.Text;
 using BD.CourseApp.Core.Domain.Students.Contracts;
 using BD.CourseApp.Infrastructures.Data.SqlServer.Extentions;
-using System.Data;
 using BD.CourseApp.Core.Domain.Students.Entities;
+using BD.CourseApp.Core.Domain.Students.DTOS;
 
 public class StudentRepository : IStudentRepository
 {
@@ -18,23 +17,14 @@ public class StudentRepository : IStudentRepository
 
     public async Task CreateAsync(Student student)
     {
-        try
-        {
+        var sql = "insert into Students (StudentId, Name) values (@StudentId, @Name)";
 
-            var sql = "insert into Students (StudentId, Name) values (@StudentId, @Name)";
-            
-            await connection.ExecuteAsync(sql, student);
-        }
-        catch (Exception ex)
-        {
-
-            throw;
-        }
+        await connection.ExecuteAsync(sql, student);
     }
 
-    public async Task<Student> GetByIdAsync(Guid id)
+    public async Task<StudentOutDTO?> GetByIdAsync(Guid id)
     {
-        return await connection.QuerySingleOrDefaultAsync<Student>(
+        return await connection.QuerySingleOrDefaultAsync<StudentOutDTO>(
             "select * from Students where StudentId = @StudentId", new { StudentId = id });
     }
 
@@ -49,16 +39,16 @@ public class StudentRepository : IStudentRepository
         await connection.ExecuteAsync(
             "delete from Students where StudentId = @StudentId", new { StudentId = id });
     }
-    
-    public async Task<IEnumerable<Student>> GetAllAsync(string? name, int pageNumber, int pageSize)
+
+    public async Task<IEnumerable<StudentOutDTO>> GetAllAsync(string? name, int pageNumber, int pageSize)
     {
-        QueryBuilder queryBuilder=new QueryBuilder();
+        QueryBuilder queryBuilder = new QueryBuilder();
         queryBuilder.Select("select * from Students ")
             .like("Name", name)
             .OrderBy("Name")
-            .PageBy(pageNumber,pageSize);
+            .PageBy(pageNumber, pageSize);
 
-        return await connection.QueryAsync<Student>(queryBuilder.Build(), new { NameFilter = name, PageNumber = pageNumber, PageSize = pageSize });
+        return await connection.QueryAsync<StudentOutDTO>(queryBuilder.Build(), new { NameFilter = name, PageNumber = pageNumber, PageSize = pageSize });
 
     }
 }

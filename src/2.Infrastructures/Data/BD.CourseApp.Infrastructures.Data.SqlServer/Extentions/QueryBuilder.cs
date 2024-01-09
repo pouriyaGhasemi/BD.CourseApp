@@ -8,10 +8,10 @@ namespace BD.CourseApp.Infrastructures.Data.SqlServer.Extentions
 {
     public class QueryBuilder
     {
-        private string _select;
+        private string _select="";
         private StringBuilder _where;
-        private string _orderby;
-        private string _pageby;
+        private string _orderby="";
+        private string _pageby="";
 
         public QueryBuilder()
         {

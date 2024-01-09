@@ -2,6 +2,7 @@ using BD.CourseApp.Core.Domain.Students.Contracts;
 using System.Data.SqlClient;
 using BD.CourseApp.Core.ApplicationService.Students;
 using Asp.Versioning;
+using BD.CourseApp.Endpoint.Api.Middlwares;
 namespace BD.CourseApp
 {
     public class Program
@@ -19,7 +20,10 @@ namespace BD.CourseApp
             .AddMvc();
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add<GlobalException>();
+            }) ;
             builder.Services.AddScoped<IStudentRepository, StudentRepository>();
             builder.Services.AddScoped(_ =>
                 new SqlConnection(builder.Configuration.GetConnectionString("CourseAppConnectionString")));
