@@ -29,7 +29,9 @@ namespace BD.CourseApp
                 new SqlConnection(builder.Configuration.GetConnectionString("CourseAppConnectionString")));
 
             builder.Services.AddScoped<GetStudentHandler>();
-            builder.Services.AddScoped<StudentCreateHandler>();
+            builder.Services.AddScoped<GetAllStudentsHandler>();
+            builder.Services.AddScoped<CreateStudentHandler>();
+            builder.Services.AddScoped<UpdateStudentHandler>();
 
 
             builder.Services.AddEndpointsApiExplorer();

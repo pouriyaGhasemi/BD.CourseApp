@@ -4,10 +4,10 @@ using BD.CourseApp.Core.Domain.Students.Entities;
 
 namespace BD.CourseApp.Core.ApplicationService.Students
 {
-    public class StudentCreateHandler
+    public class CreateStudentHandler
     {
         private readonly IStudentRepository _studentRepository;
-        public StudentCreateHandler(IStudentRepository studentRepository)
+        public CreateStudentHandler(IStudentRepository studentRepository)
         {
             _studentRepository = studentRepository;
         }

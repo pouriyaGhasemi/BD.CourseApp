@@ -6,9 +6,9 @@ namespace BD.CourseApp.Core.Domain.Students.Contracts
     public interface IStudentRepository
     {
         Task CreateAsync(Student student);
-        Task<StudentOutDTO?> GetByIdAsync(Guid id);
+        Task<Student?> GetByIdAsync(Guid id);
         Task UpdateAsync(Student student);
         Task DeleteAsync(Guid id);
-        Task<IEnumerable<StudentOutDTO>> GetAllAsync(string? nameFilter, int pageNumber, int pageSize);
+        Task<IEnumerable<StudentOutDTO>> GetAllAsync(string? nameFilter, int? pageNumber, int? pageSize);
     }
 }

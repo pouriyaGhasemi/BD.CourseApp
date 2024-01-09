@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,9 +19,9 @@ namespace BD.CourseApp.Infrastructures.Data.SqlServer.Extentions
             _where = new StringBuilder();
         }
 
-        public QueryBuilder Select(string columns)
+        public QueryBuilder Select(string select)
         {
-            _select += "{columns} ";
+            _select = select;
             return this;
         }
 
@@ -49,13 +50,16 @@ namespace BD.CourseApp.Infrastructures.Data.SqlServer.Extentions
 
         public QueryBuilder OrderBy(string columns)
         {
-            _orderby += $"order by {columns} ";
+            _orderby = $"order by {columns} ";
             return this;
         }
 
-        public QueryBuilder PageBy(int pageNumber, int pageSize)
+        public QueryBuilder PageBy(int pageNumber, int pageSize, string orderByColumns)
         {
-            _pageby += $"offset {pageNumber * pageSize} rows fetch next {pageSize} rows only ";
+            //ToDo:Check input conditions
+            ArgumentNullException.ThrowIfNullOrEmpty(orderByColumns);
+            _orderby = $"order by {orderByColumns} ";
+            _pageby += $"offset {(pageNumber-1) * pageSize} rows fetch next {pageSize} rows only ";
             return this;
         }
 

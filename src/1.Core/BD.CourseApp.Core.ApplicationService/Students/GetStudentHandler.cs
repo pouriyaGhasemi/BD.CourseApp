@@ -1,6 +1,5 @@
 ﻿using BD.CourseApp.Core.Domain.Students.Contracts;
 using BD.CourseApp.Core.Domain.Students.DTOS;
-using BD.CourseApp.Core.Domain.Students.Entities;
 
 namespace BD.CourseApp.Core.ApplicationService.Students
 {
@@ -12,16 +11,13 @@ namespace BD.CourseApp.Core.ApplicationService.Students
         {
             _studentRepository = studentRepository;
         }
-        public async Task<StudentOutDTO> Handle(string Id)
+        public async Task<StudentOutDTO> Handle(Guid id)
         {
-            ArgumentNullException.ThrowIfNullOrEmpty(Id);
-            var validId= Guid.TryParse(Id, out Guid studentId);
-            if(!validId)
-                throw new ArgumentException(nameof(Id)+" is not valid GUID");
-            var result= await _studentRepository.GetByIdAsync(studentId);
-            if (result is null)
-                throw new KeyNotFoundException($"Student not found, Id: {Id}");
-            return result;
+            var student= await _studentRepository.GetByIdAsync(id);
+            if (student is null)
+                throw new KeyNotFoundException($"Student not found, Id: {id}");
+            StudentOutDTO studentOutDTO = new StudentOutDTO() {Name= student.Name,StudentId= student.StudentId };
+            return studentOutDTO;
         }
     }
 }

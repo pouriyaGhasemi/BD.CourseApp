@@ -7,48 +7,51 @@ using BD.CourseApp.Core.Domain.Students.DTOS;
 
 public class StudentRepository : IStudentRepository
 {
-    private readonly SqlConnection connection;
+    private readonly SqlConnection _connection;
+    private const int _defaultPageNumber = 1;
+    private const int _defaultPageSize = 10;
 
     public StudentRepository(SqlConnection dbConnection)
     {
 
-        connection = dbConnection;
+        _connection = dbConnection;
     }
 
     public async Task CreateAsync(Student student)
     {
         var sql = "insert into Students (StudentId, Name) values (@StudentId, @Name)";
 
-        await connection.ExecuteAsync(sql, student);
+        await _connection.ExecuteAsync(sql, student);
     }
 
-    public async Task<StudentOutDTO?> GetByIdAsync(Guid id)
+    public async Task<Student?> GetByIdAsync(Guid id)
     {
-        return await connection.QuerySingleOrDefaultAsync<StudentOutDTO>(
+        return await _connection.QuerySingleOrDefaultAsync<Student>(
             "select * from Students where StudentId = @StudentId", new { StudentId = id });
     }
 
     public async Task UpdateAsync(Student student)
     {
         var sql = "update Students set Name = @Name where StudentId = @StudentId";
-        await connection.ExecuteAsync(sql, student);
+        await _connection.ExecuteAsync(sql, student);
     }
 
     public async Task DeleteAsync(Guid id)
     {
-        await connection.ExecuteAsync(
+        await _connection.ExecuteAsync(
             "delete from Students where StudentId = @StudentId", new { StudentId = id });
     }
 
-    public async Task<IEnumerable<StudentOutDTO>> GetAllAsync(string? name, int pageNumber, int pageSize)
+    public async Task<IEnumerable<StudentOutDTO>> GetAllAsync(string? name, int? pageNumber, int? pageSize)
     {
+        pageNumber ??= _defaultPageNumber;
+        pageSize ??= _defaultPageSize;
         QueryBuilder queryBuilder = new QueryBuilder();
         queryBuilder.Select("select * from Students ")
             .like("Name", name)
-            .OrderBy("Name")
-            .PageBy(pageNumber, pageSize);
-
-        return await connection.QueryAsync<StudentOutDTO>(queryBuilder.Build(), new { NameFilter = name, PageNumber = pageNumber, PageSize = pageSize });
+            .PageBy((int)pageNumber, (int)pageSize, "Name");
+        var query = queryBuilder.Build();
+        return await _connection.QueryAsync<StudentOutDTO>(query, new { NameFilter = name, PageNumber = pageNumber, PageSize = pageSize });
 
     }
 }

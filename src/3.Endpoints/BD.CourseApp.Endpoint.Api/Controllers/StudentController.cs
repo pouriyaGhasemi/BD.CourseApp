@@ -13,14 +13,14 @@ namespace BD.CourseApp.Endpoint.Api.Controllers
     public class StudentsController : ControllerBase
     {
         [HttpGet("{Id}")]
-        public async Task<ActionResult<StudentOutDTO>> Get([FromServices] GetStudentHandler request, [FromRoute] string Id) {
-            var result= await request.Handle(Id);
+        public async Task<ActionResult<StudentOutDTO>> Get([FromServices] GetStudentHandler getStudentHandler, [FromRoute] Guid Id) {
+            var result= await getStudentHandler.Handle(Id);
             if (result is null)
                 return NotFound();
             return  result;
         }
         [HttpPost]
-        public async Task<ActionResult> Create([FromServices] StudentCreateHandler createStudentHandler, StudentCreateDTO studentCreate)
+        public async Task<ActionResult> Create([FromServices] CreateStudentHandler createStudentHandler, StudentCreateDTO studentCreate)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -28,11 +28,25 @@ namespace BD.CourseApp.Endpoint.Api.Controllers
             return Ok();
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<StudentOutDTO>>> GetAll([FromServices] GetAllCreateHandler getAllCreateHandler
-            , [FromQuery]string? name, [FromQuery] int pageNumber, [FromQuery] int pageSize)
+        public async Task<ActionResult<IEnumerable<StudentOutDTO>>> GetAll([FromServices] GetAllStudentsHandler getAllCreateHandler
+            , [FromQuery]string? name, [FromQuery] int? pageNumber, [FromQuery] int? pageSize)
+        {
+            //ToDo:Create generic paged Object for all paged list.
+            var result = await getAllCreateHandler.Handle(name, pageNumber,pageSize);
+            return result.ToList();
+        }
+        [HttpPut]
+        public async Task<ActionResult> Update([FromServices] UpdateStudentHandler updateStudentHandler, StudentUpdateDTO studentCreate)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            await updateStudentHandler.Handle(studentCreate);
+            return Ok();
+        }
+        [HttpDelete("{Id}")]
+        public async Task<ActionResult> Delete([FromServices] DeleteStudentHandler deleteStudentHandler, [FromRoute] Guid Id)
+        {
+            await deleteStudentHandler.Handle(Id);
             return Ok();
         }
     }
