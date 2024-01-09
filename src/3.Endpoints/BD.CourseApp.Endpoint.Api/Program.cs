@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using BD.CourseApp.Core.ApplicationService.Students;
 using Asp.Versioning;
 using BD.CourseApp.Endpoint.Api.Middlwares;
+using Microsoft.Extensions.Configuration;
 namespace BD.CourseApp
 {
     public class Program
@@ -32,7 +33,12 @@ namespace BD.CourseApp
             builder.Services.AddScoped<GetAllStudentsHandler>();
             builder.Services.AddScoped<CreateStudentHandler>();
             builder.Services.AddScoped<UpdateStudentHandler>();
+            builder.Services.AddScoped<DeleteStudentHandler>();
 
+            builder.Services.AddHttpClient("CategoriesApiClient", client =>
+            {
+                client.BaseAddress = new Uri(builder.Configuration["CategoriesApiClient:Url"]);
+            });
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
