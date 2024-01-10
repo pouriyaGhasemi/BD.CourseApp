@@ -2,7 +2,7 @@
 {
     public class AssignedCourse
     {
-        public Guid courseId { get; set; }
-        public Guid studentId { get; set; }
+        public Guid CourseId { get; set; }
+        public Guid StudentId { get; set; }
     }
 }

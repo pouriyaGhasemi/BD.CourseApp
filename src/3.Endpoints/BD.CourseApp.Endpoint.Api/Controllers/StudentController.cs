@@ -21,6 +21,7 @@ namespace BD.CourseApp.Endpoint.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> Create([FromServices] CreateStudentHandler createStudentHandler, StudentCreateDTO studentCreate)
         {
+            //ToDo: dont get GUID from client and create it in service and send it as response.
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             await createStudentHandler.Handle(studentCreate);

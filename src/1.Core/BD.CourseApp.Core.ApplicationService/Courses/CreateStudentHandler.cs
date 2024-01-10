@@ -10,9 +10,11 @@ namespace BD.CourseApp.Core.ApplicationService.Courses
         {
             _CourseRepository = CourseRepository;
         }
-        public async Task Handle(CourseCreateDTO courseCreate)
+        public async Task<Guid> Handle(CourseCreateDTO courseCreate)
         {
-            await _CourseRepository.CreateAsync(courseCreate);
+            Guid courseId = Guid.NewGuid();
+            await _CourseRepository.CreateAsync(courseCreate, courseId);
+            return courseId;
         }
     }
 }

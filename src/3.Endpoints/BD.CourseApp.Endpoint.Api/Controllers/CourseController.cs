@@ -2,6 +2,7 @@
 using BD.CourseApp.Core.ApplicationService.Courses;
 using BD.CourseApp.Core.Domain.Courses.Contracts;
 using BD.CourseApp.Core.Domain.Courses.DTOs;
+using BD.CourseApp.Core.Domain.Students.DTOS;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BD.CourseApp.Endpoint.Api.Controllers
@@ -15,20 +16,22 @@ namespace BD.CourseApp.Endpoint.Api.Controllers
         [Route("api/v{version:apiVersion}/courses")]
         public class CoursesController : ControllerBase
         {
-            private readonly ICourseRepository _courseRepository;
-
-            public CoursesController(ICourseRepository courseRepository)
-            {
-                _courseRepository = courseRepository;
-            }
 
             [HttpGet("{id}")]
-            public async Task<ActionResult<CourseOutDTO>> Get([FromServices]GetCourseHandler handler,Guid id)
+            public async Task<ActionResult<CourseOutDTO>> Get([FromServices]GetCourseHandler handler, [FromRoute] Guid id)
             {
                 var course = await handler.Handle(id);
                 if (course == null)
                     return NotFound();
                 return Ok(course);
+            }
+            [HttpGet("{id}/students")]
+            public async Task<ActionResult<IEnumerable< StudentOutDTO>>> GetStudents([FromServices] GetStudentsOfCourseHandler handler,[FromRoute] Guid id)
+            {
+                var students = await handler.Handle(id);
+                if (students == null)
+                    return NoContent();
+                return Ok(students);
             }
 
             [HttpGet]
@@ -39,9 +42,16 @@ namespace BD.CourseApp.Endpoint.Api.Controllers
             }
 
             [HttpPost]
-            public async Task<ActionResult> Create([FromServices] CreateCourseHandler handler ,[FromBody] CourseCreateDTO course)
+            public async Task<ActionResult<Guid>> Create([FromServices] CreateCourseHandler handler ,[FromBody] CourseCreateDTO course)
             {
                 //ToDo: dont get GUID from client and create it in service and send it as response.
+                var courseId= await handler.Handle(course);
+                return courseId;
+            }
+
+            [HttpPost("{courseid}/assign/{studentid}")]
+            public async Task<ActionResult> AssignStudent([FromServices] CreateCourseHandler handler, [FromBody] CourseCreateDTO course)
+            {
                 await handler.Handle(course);
                 return Ok();
             }
