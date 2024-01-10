@@ -3,9 +3,7 @@ using BD.CourseApp.Core.Domain.Categories.Contracts;
 using BD.CourseApp.Core.Domain.Categories.Entities;
 using BD.CourseApp.Core.Domain.Courses.Contracts;
 using BD.CourseApp.Core.Domain.Courses.DTOs;
-using BD.CourseApp.Core.Domain.Students.Entities;
 using Moq;
-using System.Transactions;
 
 namespace BD.CourseApp.Tests.Services
 {

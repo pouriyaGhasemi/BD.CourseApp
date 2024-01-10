@@ -23,7 +23,8 @@ namespace BD.CourseApp.Infrastructures.Services.Outbound
         {
             if(_categories!=null)
                 return _categories;
-            HttpResponseMessage response = await _httpClient.GetAsync("https://6523c967ea560a22a4e8d725.mockapi.io/CourseCategories");
+            
+            HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress);
 
             if (response.IsSuccessStatusCode)
             {
