@@ -15,7 +15,7 @@ namespace BD.CourseApp.Core.ApplicationService.Courses
         }
         public async Task<Guid> Handle(CourseCreateDTO courseCreate)
         {
-            var category= _categoryService.GetCategoryById(courseCreate.CategoryId);
+            var category=await _categoryService.GetCategoryById(courseCreate.CategoryId);
             if (category is null) 
                 throw new ArgumentException($"Invalid CategoryId, Id:{courseCreate.CategoryId}");
             

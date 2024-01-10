@@ -12,27 +12,27 @@ namespace BD.CourseApp.Endpoint.Api.Controllers
     public class StudentsController : ControllerBase
     {
         [HttpGet("{Id}")]
-        public async Task<ActionResult<StudentOutDTO>> Get([FromServices] GetStudentHandler getStudentHandler, [FromRoute] Guid Id) {
-            var result= await getStudentHandler.Handle(Id);
+        public async Task<ActionResult<StudentOutDTO>> Get([FromServices] GetStudentHandler getStudentHandler, [FromRoute] Guid Id)
+        {
+            var result = await getStudentHandler.Handle(Id);
             if (result is null)
                 return NotFound();
-            return  result;
+            return result;
         }
         [HttpPost]
-        public async Task<ActionResult> Create([FromServices] CreateStudentHandler createStudentHandler, StudentCreateDTO studentCreate)
+        public async Task<ActionResult<Guid>> Create([FromServices] CreateStudentHandler createStudentHandler, StudentCreateDTO studentCreate)
         {
-            //ToDo: dont get GUID from client and create it in service and send it as response.
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            await createStudentHandler.Handle(studentCreate);
-            return Ok();
+            var id = await createStudentHandler.Handle(studentCreate);
+            return id;
         }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<StudentOutDTO>>> GetAll([FromServices] GetAllStudentsHandler getAllCreateHandler
-            , [FromQuery]string? name, [FromQuery] int? pageNumber, [FromQuery] int? pageSize)
+            , [FromQuery] string? name, [FromQuery] int? pageNumber, [FromQuery] int? pageSize)
         {
             //ToDo:Create generic paged Object for all paged list.
-            var result = await getAllCreateHandler.Handle(name, pageNumber,pageSize);
+            var result = await getAllCreateHandler.Handle(name, pageNumber, pageSize);
             if (result is null)
                 return NoContent();
             return result.ToList();

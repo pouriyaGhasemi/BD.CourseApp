@@ -46,7 +46,9 @@ namespace BD.CourseApp.Endpoint.Api.Controllers
             [HttpPost]
             public async Task<ActionResult<Guid>> Create([FromServices] CreateCourseHandler handler ,[FromBody] CourseCreateDTO course)
             {
-                //ToDo: dont get GUID from client and create it in service and send it as response.
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
                 var courseId= await handler.Handle(course);
                 return courseId;
             }

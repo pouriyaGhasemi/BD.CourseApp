@@ -11,10 +11,11 @@ namespace BD.CourseApp.Core.ApplicationService.Students
         {
             _studentRepository = studentRepository;
         }
-        public async Task Handle(StudentCreateDTO studentCreate)
+        public async Task<Guid> Handle(StudentCreateDTO studentCreate)
         {
             var student = new Student() { StudentId = Guid.NewGuid(), Name = studentCreate.Name };
             await _studentRepository.CreateAsync(student);
+            return student.StudentId;
         }
     }
 }

@@ -21,7 +21,9 @@ namespace BD.CourseApp.Core.ApplicationService.AssignCourses
         public async Task Handle(AssignedCourse assignedCourse)
         {
             var assignedCourseExist = await _assignedCourseRepository.GetByIdAsync(assignedCourse.CourseId, assignedCourse.StudentId);
-            if (assignedCourseExist is null) throw new KeyNotFoundException($"{nameof(assignedCourse)} not found. courseId:{assignedCourse.CourseId} studentId:{assignedCourse.StudentId}");
+            if (assignedCourseExist is null) 
+                throw new KeyNotFoundException($"{nameof(assignedCourse)} not found. courseId:{assignedCourse.CourseId} studentId:{assignedCourse.StudentId}");
+            
             await _assignedCourseRepository.Delete(assignedCourse.CourseId, assignedCourse.StudentId);
         }
     }
