@@ -1,11 +1,12 @@
-﻿using BD.CourseApp.Core.Domain.AssignedCourses.Entities;
+﻿using BD.CourseApp.Core.Domain.AssignedCourses.Contracts;
+using BD.CourseApp.Core.Domain.AssignedCourses.Entities;
 using BD.CourseApp.Core.Domain.Courses.Entites;
 using Dapper;
 using System.Data.SqlClient;
 
 namespace BD.CourseApp.Infrastructures.Data.SqlServer.Repositories
 {
-    public class AssignedCourseRepository
+    public class AssignedCourseRepository: IAssignedCourseRepository
     {
         private readonly SqlConnection _connection;
 

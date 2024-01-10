@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Mvc" Version="8.0.0" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
@@ -21,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\1.Core\BD.CourseApp.Core.ApplicationService\BD.CourseApp.Core.ApplicationService.csproj" />
     <ProjectReference Include="..\..\2.Infrastructures\Data\BD.CourseApp.Infrastructures.Data.SqlServer\BD.CourseApp.Infrastructures.Data.SqlServer.csproj" />
+    <ProjectReference Include="..\..\2.Infrastructures\Services\BD.CourseApp.Infrastructures.Services.Outbound\BD.CourseApp.Infrastructures.Services.Outbound.csproj" />
   </ItemGroup>
 
 </Project>
