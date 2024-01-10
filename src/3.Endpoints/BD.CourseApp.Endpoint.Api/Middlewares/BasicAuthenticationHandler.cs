@@ -1,6 +1,4 @@
-﻿using System.Reflection.PortableExecutable;
-using System.Text;
-using System;
+﻿using System.Text;
 
 namespace BD.CourseApp.Endpoint.Api.Middlewares
 {
