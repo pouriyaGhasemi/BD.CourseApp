@@ -53,13 +53,6 @@ namespace BD.CourseApp.Endpoint.Api.Controllers
                 return courseId;
             }
 
-            [HttpPost("{courseid}/assign/{studentid}")]
-            public async Task<ActionResult> AssignStudent([FromServices] CreateCourseHandler handler, [FromBody] CourseCreateDTO course)
-            {
-                await handler.Handle(course);
-                return Ok();
-            }
-
             [HttpPut]
             public async Task<ActionResult> Update([FromServices] UpdateCourseHandler handler ,[FromBody] CourseUpdateDTO course)
             {
