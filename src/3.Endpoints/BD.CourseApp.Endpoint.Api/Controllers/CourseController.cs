@@ -38,6 +38,8 @@ namespace BD.CourseApp.Endpoint.Api.Controllers
             public async Task<ActionResult<IEnumerable<CourseOutDTO>>> GetAll([FromServices]GetAllCoursesHandler handler)
             {
                 var courses = await handler.Handle();
+                if (courses is null)
+                    return NoContent();
                 return Ok(courses);
             }
 
