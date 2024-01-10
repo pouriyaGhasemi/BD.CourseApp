@@ -33,6 +33,8 @@ namespace BD.CourseApp.Endpoint.Api.Controllers
         {
             //ToDo:Create generic paged Object for all paged list.
             var result = await getAllCreateHandler.Handle(name, pageNumber,pageSize);
+            if (result is null)
+                return NoContent();
             return result.ToList();
         }
         [HttpPut]
