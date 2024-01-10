@@ -1,5 +1,6 @@
 ﻿using BD.CourseApp.Core.Domain.Students.Contracts;
 using BD.CourseApp.Core.Domain.Students.Entities;
+using BD.CourseApp.Infrastructures.Data.SqlServer.Repositories;
 using BD.CourseApp.Tests.Base;
 using System.Transactions;
 

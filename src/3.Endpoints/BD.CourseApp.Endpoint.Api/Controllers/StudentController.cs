@@ -1,7 +1,6 @@
 ﻿using Asp.Versioning;
 using BD.CourseApp.Core.ApplicationService.Students;
 using BD.CourseApp.Core.Domain.Students.DTOS;
-using BD.CourseApp.Core.Domain.Students.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BD.CourseApp.Endpoint.Api.Controllers

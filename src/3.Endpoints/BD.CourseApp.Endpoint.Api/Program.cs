@@ -4,6 +4,8 @@ using BD.CourseApp.Core.ApplicationService.Students;
 using Asp.Versioning;
 using BD.CourseApp.Endpoint.Api.Middlwares;
 using Microsoft.Extensions.Configuration;
+using BD.CourseApp.Infrastructures.Data.SqlServer.Repositories;
+using BD.CourseApp.Core.ApplicationService.Courses;
 namespace BD.CourseApp
 {
     public class Program
@@ -34,6 +36,12 @@ namespace BD.CourseApp
             builder.Services.AddScoped<CreateStudentHandler>();
             builder.Services.AddScoped<UpdateStudentHandler>();
             builder.Services.AddScoped<DeleteStudentHandler>();
+
+            builder.Services.AddScoped<GetCourseHandler>();
+            builder.Services.AddScoped<GetAllCoursesHandler>();
+            builder.Services.AddScoped<CreateCourseHandler>();
+            builder.Services.AddScoped<UpdateCourseHandler>();
+            builder.Services.AddScoped<DeleteCourseHandler>();
 
             builder.Services.AddHttpClient("CategoriesApiClient", client =>
             {

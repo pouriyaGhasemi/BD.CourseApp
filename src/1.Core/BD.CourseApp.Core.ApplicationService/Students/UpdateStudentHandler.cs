@@ -1,6 +1,5 @@
 ﻿using BD.CourseApp.Core.Domain.Students.Contracts;
 using BD.CourseApp.Core.Domain.Students.DTOS;
-using BD.CourseApp.Core.Domain.Students.Entities;
 
 namespace BD.CourseApp.Core.ApplicationService.Students
 {
@@ -16,6 +15,7 @@ namespace BD.CourseApp.Core.ApplicationService.Students
             var student=await _studentRepository.GetByIdAsync(studentUpdate.StudentId);
             if (student is null)
                 throw new KeyNotFoundException($"{nameof(student)} ID:{studentUpdate.StudentId}");
+            student.Name = studentUpdate.Name;
             await _studentRepository.UpdateAsync(student);
         }
     }
