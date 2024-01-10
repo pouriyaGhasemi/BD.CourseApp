@@ -3,7 +3,6 @@ using System.Data.SqlClient;
 using BD.CourseApp.Core.ApplicationService.Students;
 using Asp.Versioning;
 using BD.CourseApp.Endpoint.Api.Middlwares;
-using Microsoft.Extensions.Configuration;
 using BD.CourseApp.Infrastructures.Data.SqlServer.Repositories;
 using BD.CourseApp.Core.ApplicationService.Courses;
 using BD.CourseApp.Endpoint.Api.Middlewares;
@@ -13,6 +12,7 @@ using BD.CourseApp.Core.Domain.Courses.Contracts;
 using BD.CourseApp.Core.Domain.Categories.Contracts;
 using BD.CourseApp.Infrastructures.Services.Outbound;
 using BD.CourseApp.Core.ApplicationService.Categories;
+
 namespace BD.CourseApp
 {
     public class Program

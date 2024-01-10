@@ -20,20 +20,17 @@ namespace BD.CourseApp.Core.ApplicationService.Courses
         }
         public async Task<IEnumerable<CourseOutDTO>?> Handle()
         {
-            List<CourseOutDTO> courseOutDTOs = new List<CourseOutDTO>();
-            var rawCourses=await _courseRepository.GetAllAsync();
-            if (rawCourses == null)
-                return null;
-            foreach (var course in rawCourses)
+            var rawCourses = await _courseRepository.GetAllAsync();
+            if (rawCourses == null) return null;
+
+            var courseOutDTOs = rawCourses.Select(async course => new CourseOutDTO
             {
-                courseOutDTOs.Add(new CourseOutDTO()
-                {
-                    Category = await _categoryService.GetCategoryById(course.CategoryId),
-                    CourseId = course.CourseId,
-                    Title = course.Title
-                }); 
-            }
-          return courseOutDTOs;
+                Category = await _categoryService.GetCategoryById(course.CategoryId),
+                CourseId = course.CourseId,
+                Title = course.Title
+            });
+
+            return await Task.WhenAll(courseOutDTOs);
         }
     }
 }

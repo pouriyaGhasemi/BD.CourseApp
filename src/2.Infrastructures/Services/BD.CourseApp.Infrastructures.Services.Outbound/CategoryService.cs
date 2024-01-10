@@ -13,7 +13,8 @@ namespace BD.CourseApp.Infrastructures.Services.Outbound
         private readonly HttpClient _httpClient;
         private ImmutableSortedDictionary<int,Category>? _categories;
 
-        //use system.text.json over newtonsoft in .net 8
+        //ToDo:Use system.text.json over newtonsoft in .net 8
+        //ToDo:Cache this in our local databse and call it just in create course.
         public CategoryService(HttpClient httpClient)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
@@ -22,20 +23,16 @@ namespace BD.CourseApp.Infrastructures.Services.Outbound
         {
             if(_categories!=null)
                 return _categories;
-            //ToDo:Cache this in our local databse and call it just in create course.
             HttpResponseMessage response = await _httpClient.GetAsync("https://6523c967ea560a22a4e8d725.mockapi.io/CourseCategories");
 
             if (response.IsSuccessStatusCode)
             {
                 string responseData = await response.Content.ReadAsStringAsync();
-                // Deserialize the JSON response into a Category object
-                IEnumerable<Category>? categories = JsonConvert.DeserializeObject<IEnumerable<Category>>(responseData);
-                //JsonSerializer.DeserializeAsyncEnumerable<IEnumerable<Category>>(responseData);
-
+                IEnumerable<Category>? categories = JsonConvert
+                    .DeserializeObject<IEnumerable<Category>>(responseData);
                 ArgumentNullException.ThrowIfNull(categories);
                 return categories.ToImmutableSortedDictionary(category => category.Id, category => category);
             }
-
             throw new HttpRequestException($"Error calling API. Status code: {response.StatusCode}");
         }
         public async Task<Category> GetCategoryById(int id)

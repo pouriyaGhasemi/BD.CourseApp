@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace BD.CourseApp.Endpoint.Api.Middlwares
 {
@@ -18,7 +19,6 @@ namespace BD.CourseApp.Endpoint.Api.Middlwares
         {
             if (_host.IsProduction())
             {
-                //add log
                 var result = new ObjectResult("An error occured");
                 result.StatusCode = 500;
                 context.Result = result;
