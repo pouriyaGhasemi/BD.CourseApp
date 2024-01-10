@@ -22,7 +22,7 @@ namespace BD.CourseApp.Infrastructures.Data.SqlServer.Repositories
 
         public async Task CreateAsync(CourseCreateDTO course)
         {
-            var sql = "insert into Courses (CourseId, Name, CategoryId) values (@CourseId, @Name, @CategoryId)";
+            var sql = "insert into Courses (CourseId, Title, CategoryId) values (@CourseId, @Title, @CategoryId)";
             await _connection.ExecuteAsync(sql, course);
         }
 
@@ -36,7 +36,7 @@ namespace BD.CourseApp.Infrastructures.Data.SqlServer.Repositories
 
         public async Task UpdateAsync(CourseUpdateDTO course)
         {
-            var sql = "update Courses set Name = @Name, CategoryId = @CategoryId where CourseId = @CourseId";
+            var sql = "update Courses set Title = @Title, CategoryId = @CategoryId where CourseId = @CourseId";
             await _connection.ExecuteAsync(sql, course);
         }
 

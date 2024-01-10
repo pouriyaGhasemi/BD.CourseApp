@@ -12,6 +12,7 @@ using BD.CourseApp.Core.Domain.AssignedCourses.Contracts;
 using BD.CourseApp.Core.Domain.Courses.Contracts;
 using BD.CourseApp.Core.Domain.Categories.Contracts;
 using BD.CourseApp.Infrastructures.Services.Outbound;
+using BD.CourseApp.Core.ApplicationService.Categories;
 namespace BD.CourseApp
 {
     public class Program
@@ -50,6 +51,8 @@ namespace BD.CourseApp
             builder.Services.AddScoped<CreateCourseHandler>();
             builder.Services.AddScoped<UpdateCourseHandler>();
             builder.Services.AddScoped<DeleteCourseHandler>();
+
+            builder.Services.AddScoped<GetAllCategoriesHandler>();
             
             builder.Services.AddHttpClient("CategoriesApiClient", client =>
             {
@@ -89,6 +92,7 @@ namespace BD.CourseApp
 
             app.UseMiddleware<BasicAuthenticationHandler>("test area");
             app.UseAuthorization();
+            app.UseHttpsRedirection();
             app.MapControllers();
 
             app.Run();
