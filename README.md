@@ -17,5 +17,9 @@ don’t use Entity Framework or another ORM, we also want to see your SQL skills
 ## Tasks  
 create the database schema 
 design and implement the REST API 
-These are the basic requirements, it is up to you to go into more details in areas that you deem most 
+These are the basic requirements, it is up to you to go into more detail in areas that you deem most 
 important when developing such a piece of software. 
+# install
+- you need to run docker-compose
+- connect to  Docker database
+- I could not use EF and migration so, run a script to build the database. the script is in Solution Items/script.sql
